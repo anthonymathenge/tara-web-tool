@@ -20,6 +20,7 @@ class AssetController extends Controller
         ]);
 
         $asset = new Asset();
+        $asset->user_id = auth()->user()->id; // Associate the asset with the currently authenticated user
         $asset->asset_id = uniqid(); // Generate a unique asset ID
         $asset->name = $request->name;
         // Set other asset details from the form
@@ -34,8 +35,9 @@ class AssetController extends Controller
         return view('assets.create', compact('assets'));
     }
     public function show(Asset $asset)
-{
-    $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
-    return view('assets.show', compact('asset', 'securityProperties'));
-}
+    {
+        $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
+        return view('assets.show', compact('asset', 'securityProperties'));
+    }
+
 }

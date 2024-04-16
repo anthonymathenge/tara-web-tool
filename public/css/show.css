@@ -1,0 +1,118 @@
+
+
+/* Update container styling */
+.container {
+  background: rgba(0, 0, 0, 0.75);
+  margin: auto;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.75);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Style for the icon */
+.asset-details-icon {
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+
+.links {
+  font-size: 16px;
+  font-weight: 300;
+  text-align: center;
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 10px;
+  overflow: hidden;
+  width: 90%;
+  margin-left: 5%;
+  cursor: pointer;
+}
+
+.links:after {
+  content: '';
+  position: absolute;
+  width: 80%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  bottom: 50%;
+  left: -100%;
+  transition-delay: all 0.5s;
+  transition: all 0.5s;
+}
+
+.links:hover:after,
+.links.hover:after {
+  left: 100%;
+}
+
+.links .text {
+  text-shadow: 0px -40px 0px rgba(255, 255, 255, 1);
+  transition: all 0.75s;
+  transform: translateY(100%) translateZ(0);
+  transition-delay: all 0.25s;
+}
+
+.links:hover .text,
+.links.hover .text {
+  text-shadow: 0px -40px 0px rgba(255, 255, 255, 0);
+  transform: translateY(0%) translateZ(0) scale(1.1);
+  font-weight: 600;
+}
+
+.dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(5px); /* Blur effect */
+  z-index: 999; /* Ensure it's above other content */
+  display: none; /* Hide by default */
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-container.active {
+  display: flex; /* Show when active */
+}
+
+/* Full-width input fields */
+.form-container input[type=text],
+.form-container input[type=password],
+.form-container select,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: #f44336;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover,
+.open-button:hover {
+  opacity: 1;
+}

@@ -1,22 +1,37 @@
 function openSTRIDEForm() {
-  document.getElementById("strideForm").style.display = "block";
+  document.getElementById("strideForm").classList.add("active");
 }
 
 // Function to close STRIDE selection form
 function closeSTRIDEForm() {
-  document.getElementById("strideForm").style.display = "none";
+  document.getElementById("strideForm").classList.remove("active");
 }
 
-function enterThreatName() {
-  document.getElementById("threatNameForm").style.display = "block";
+function openThreatForm() {
+  document.getElementById("threatForm").style.display = "block";
 }
 
-function closeThreatNameForm() {
-  document.getElementById("threatNameForm").style.display = "none";
+function closeThreatForm() {
+  document.getElementById("threatForm").style.display = "none";
 }
 
-// Function to generate a unique Threat ID (You need to implement this function)
-function generateThreatId() {
-  // Your code to generate a unique Threat ID goes here
-  return Math.floor(Math.random() * 1000); // Example: Generating a random number as Threat ID
+
+function handleThreatFormSubmit(event) {
+  event.preventDefault();
+  var threatName = document.getElementById('threatName').value;
+  var threatType = document.getElementById('threatType').value;
+  
+  document.getElementById('threatNameDisplay').innerText = "Threat Name: " + threatName;
+  document.getElementById('threatTypeDisplay').innerText = "Threat Type: " + threatType;
+
+  document.getElementById('threatNameDisplay').style.display = 'block';
+  document.getElementById('threatTypeDisplay').style.display = 'block';
+
+  // Add any other actions needed after form submission
+
+  // Close the threat form popup
+  closeThreatForm();
 }
+
+// Assuming you have a form with the ID 'threatForm'
+document.getElementById('threatForm').addEventListener('submit', handleThreatFormSubmit);

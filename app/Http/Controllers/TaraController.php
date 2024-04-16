@@ -3,106 +3,51 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DamageScenario;
-use App\Models\Asset; // Make sure to import the Threat model
+use App\Models\Tara;
+use App\Models\Asset;
 
 class TaraController extends Controller
 {
-    public function index()
+    public function index($assetId)
     {
-        // Fetch data or pass required information to the view
-        $threatId = ''; // Fetch or set the Threat ID
-        $threatName = ''; // Fetch or set the Threat Name
-        $affectedAsset = ''; // Fetch or set the Affected Asset
-        
-        return view('assets.tara', compact('threatId', 'threatName', 'affectedAsset'));
+        // Fetch the asset based on the ID
+        $asset = Asset::findOrFail($assetId);
+
+        // Fetch TARA records associated with the specified asset
+        $taraRecords = Tara::where('asset_id', $assetId)->get();
+
+        // Return the view with the TARA records data
+        return view('assets.tara', compact('asset', 'taraRecords'));
     }
 
     public function store(Request $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'attack_path' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-        $validatedData = $request->validate([
-            'elapsed_time' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-        $validatedData = $request->validate([
-            'specialist_expertise' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-        $validatedData = $request->validate([
-            'knowledge_item' => 'required|string|max:255', // Adjust validation rules as needed
+        $request->validate([
+            'asset_id' => 'required|exists:assets,id',
+            'attack_path' => 'required|string',
+            'elapsed_time' => 'required|string|in:<1 week,<1 month,<=6 months,<=3 years,>3 years',
+            'specialist_expertise' => 'required|string|in:layman,proficient,expert,multiple experts',
+            'knowledge_item' => 'required|string|in:public,restricted,confidential,strictly confidential',
+            'window_of_opportunity' => 'required|string|in:Unlimited,Easy,Moderate,Difficult',
+            'equipment' => 'required|string|in:Standard,Specialised,Bespoke,Multiple Bespoke',
         ]);
 
-     
-    }
+        $taraRecord = new Tara();
 
-    public function storeAttackPath(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'attack_path' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
+        // Populate the TARA record attributes from the request
+        $taraRecord->asset_id = $request->asset_id;
+        $taraRecord->attack_path = $request->attack_path;
+        $taraRecord->elapsed_time = $request->elapsed_time;
+        $taraRecord->specialist_expertise = $request->specialist_expertise;
+        $taraRecord->knowledge_item = $request->knowledge_item;
+        $taraRecord->window_of_opportunity = $request->window_of_opportunity;
+        $taraRecord->equipment = $request->equipment;
 
-        // Store the attack path or perform any necessary actions
-        // For example:
-        // $attackPath = new Attack();
-        // $attackPath->path = $validatedData['attack_path'];
-        // $attackPath->save();
+        // Save the TARA record to the database
+        $taraRecord->save();
 
-        // Redirect back or to any other page after storing the attack path
-        return redirect()->back()->with('success', 'Attack path stored successfully.');
-    }
-
-    public function storeElapsedTime(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'elapsed_time' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-
-        // Store the elapsed time or perform any necessary actions
-        // For example:
-        // $elapsedTime = new ElapsedTime();
-        // $elapsedTime->time = $validatedData['elapsed_time'];
-        // $elapsedTime->save();
-
-        // Redirect back or to any other page after storing the elapsed time
-        return redirect()->back()->with('success', 'Elapsed time stored successfully.');
-    }
-
-    public function storeSpecialistExpertise(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'specialist_expertise' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-
-        // Store the specialist expertise or perform any necessary actions
-        // For example:
-        // $expertise = new SpecialistExpertise();
-        // $expertise->expertise = $validatedData['specialist_expertise'];
-        // $expertise->save();
-
-        // Redirect back or to any other page after storing the specialist expertise
-        return redirect()->back()->with('success', 'Specialist expertise stored successfully.');
-    }
-
-    public function storeKnowledgeItem(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'knowledge_item' => 'required|string|max:255', // Adjust validation rules as needed
-        ]);
-
-        // Store the knowledge item or perform any necessary actions
-        // For example:
-        // $knowledgeItem = new KnowledgeItem();
-        // $knowledgeItem->item = $validatedData['knowledge_item'];
-        // $knowledgeItem->save();
-
-        // Redirect back or to any other page after storing the knowledge item
-        return redirect()->back()->with('success', 'Knowledge item stored successfully.');
+        // Redirect back to the asset TARA index page with a success message
+        return redirect()->route('tara.index', ['assetId' => $request->asset_id])
+                         ->with('success', 'TARA record saved successfully.');
     }
 }
-

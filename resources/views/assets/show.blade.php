@@ -1,192 +1,241 @@
 <!-- resources/views/assets/show.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Title</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-    <body>
-        <h1>{{ $asset->name }}</h1>
+@extends('layouts.app')
 
-        <!-- Button to open the security property selection pop-up -->
-        <button class="open-button" onclick="openSecurityForm()">Select Security Property</button>
+@section('title', 'show')
 
-        <!-- Security property selection pop-up -->
-        <div class="form-popup" id="securityForm">
-            <form id=securityFormSubmit action="{{ route('damage.store') }}" class="form-container" method="post">
+@section('content')
+
+    <div class="container">
+        <div class="links" onclick="openSecurityForm()"><span class="text">Security </span></div>
+        <div class="links" onclick="openDamageForm()"><span class="text">Damage </span></div>
+        <div class="links" onclick="openSafetyForm()"><span class="text">Saftey</span></div>
+        <div class="links" onclick="openFinancialForm()"><span class="text">Financial</span></div>
+        <div class="links" onclick="openOperationalForm()"><span class="text">Operational</span></div>
+        <div class="links" onclick="openPrivacyForm()"><span class="text">Privacy</span></div>
+    </div>
+
+    <!-- Button to open the security property selection pop-up -->
+    <!-- Security property selection pop-up -->
+    <div class="dialog-container" id="securityForm">
+        <div class="card">
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Select Security Property
+                    <small>Choose a security property</small>
+                </h2>
+            </div>
+            <form class="card-form" id="securityFormSubmit" action="{{ route('damage.store') }}" method="post">
                 @csrf
-                <h1>Select Security Property</h1>
                 <input type="hidden" name="asset_id" value="{{ $asset->id }}">
-                <p>Select security property:</p>
-                <select id="securityProperty" name="security_property">
-                    @foreach($securityProperties as $property)
-                        <option value="{{ $property }}">{{ $property }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closeSecurityForm()">Close</button>
+                <div class="input">
+                    <select id="securityProperty" name="security_property" class="input-field">
+                        @foreach($securityProperties as $property)
+                            <option value="{{ $property }}">{{ $property }}</option>
+                        @endforeach
+                    </select>
+                    <label class="input-label">Select security property</label>
+                </div>
+                <div class="action">
+                    <button type="submit" class="action-button btn btn-primary">Submit</button>
+                    <button type="button" class="action-button btn btn-secondary" onclick="closeSecurityForm()">Close</button>
+                </div>
             </form>
+            <div class="card-info">
+                <p>By signing up you are agreeing to our <a href="#">Terms and Conditions</a></p>
+            </div>
         </div>
+    </div>
 
-        <!-- Damage Scenario Form -->
-        <button class="open-button" onclick="openDamageForm()">Input Damage Scenario</button>
-        <div class="form-popup" id="damageForm">
-            <form id= damageFormSubmit action="{{ route('damage.store') }}" class="form-container" method="post">
-                @csrf
-                <h1>Input Damage Scenario</h1>
+
+
+    <!-- Damage Scenario Form -->
+    <div class="dialog-container" id="damageForm">
+        <form id="damageFormSubmit" action="{{ route('damage.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Input Damage Scenario
+                </h2>
+            </div>
+            <div class="card-form">
                 <label for="damageScenario"><b>Damage Scenario:</b></label>
                 <textarea class="form-control" id="damageScenario" name="damage_scenario" rows="3" placeholder="Enter Damage Scenario" required></textarea>
-                
                 <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeDamageForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closeDamageForm()">Close</button>
-            </form>
-        </div>
 
-        <!-- Safety Impact Form -->
-        <button class="open-button" onclick="openSafetyForm()">Input Safety Impact</button>
-        <div class="form-popup" id="safetyForm">
-            <form id= safetyFormSubmit action="{{ route('damage.store') }}" class="form-container" method="post">
-                @csrf
-                <h1>Safety Impact</h1>
+
+    <!-- Safety Impact Form -->
+    <div class="dialog-container" id="safetyForm">
+        <form id="safetyFormSubmit" action="{{ route('damage.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Safety Impact
+                </h2>
+            </div>
+            <div class="card-form">
                 <label for="safetyImpact"><b>Select Safety Impact Severity:</b></label>
-                <div class="form-group">
-                    <select class="form-control" id="safetyImpact" name="safety_impact">
-                        <option value="Negligible">Negligible</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Major">Major</option>
-                        <option value="Severe">Severe</option>
-                    </select>
-                </div>
+                <select class="form-control" id="safetyImpact" name="safety_impact" required>
+                    <option value="Negligible">Negligible</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Major">Major</option>
+                    <option value="Severe">Severe</option>
+                </select>
                 <label for="safetyJustification"><b>Justification for Safety Impact Rating:</b></label>
                 <textarea class="form-control" id="safetyJustification" name="safety_justification" rows="3" placeholder="Enter Justification" required></textarea>
-
                 <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeSafteyForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closeSafteyForm()">Close</button>
-            </form>
-        </div>
 
-        <!-- Financial Impact Form -->
-        <button class="open-button" onclick="openFinancialForm()">Input Financial Impact</button>
-        <div class="form-popup" id="financialForm">
-            <form id="financialFormSubmit" class="form-container">
-                @csrf
-                <h1>Financial Impact</h1>
+    <!-- Financial Impact Form -->
+    <div class="dialog-container" id="financialForm">
+        <form id="financialFormSubmit" action="{{ route('damage.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Financial Impact
+                </h2>
+            </div>
+            <div class="card-form">
                 <label for="financialImpact"><b>Select Financial Impact Severity:</b></label>
-                <div class="form-group">
-                    <select class="form-control" id="financialImpact" name="financial_impact" required>
-                        <option value="Negligible">Negligible</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Major">Major</option>
-                        <option value="Severe">Severe</option>
-                    </select>
-                </div>
+                <select class="form-control" id="financialImpact" name="financial_impact" required>
+                    <option value="Negligible">Negligible</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Major">Major</option>
+                    <option value="Severe">Severe</option>
+                </select>
                 <label for="financialJustification"><b>Justification for Financial Impact Rating:</b></label>
                 <textarea class="form-control" id="financialJustification" name="financial_justification" rows="3" placeholder="Enter Justification" required></textarea>
+                <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeFinancialForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closeFinancialForm()">Close</button>
-            </form>
-        </div>
 
-        <!-- Operational Impact Form -->
-        <button class="open-button" onclick="openOperationalForm()">Input Operational Impact</button>
-        <div class="form-popup" id="operationalForm">
-            <form id= operationalFormSubmit action="{{ route('damage.store') }}" class="form-container" method="post">
-                @csrf
-                <h1>Operational Impact</h1>
+    <!-- Operational Impact Form -->
+    <div class="dialog-container"  id="operationalForm">
+        <form id="operationalFormSubmit" action="{{ route('damage.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Operational Impact
+                </h2>
+            </div>
+            <div class="card-form">
                 <label for="operationalImpact"><b>Select Operational Impact Severity:</b></label>
-                <div class="form-group">
-                    <select class="form-control" id="operationalImpact" name="operational_impact">
-                        <option value="Negligible">Negligible</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Major">Major</option>
-                        <option value="Severe">Severe</option>
-                    </select>
-                </div>
+                <select class="form-control" id="operationalImpact" name="operational_impact" required>
+                    <option value="Negligible">Negligible</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Major">Major</option>
+                    <option value="Severe">Severe</option>
+                </select>
                 <label for="operationalJustification"><b>Justification for Operational Impact Rating:</b></label>
                 <textarea class="form-control" id="operationalJustification" name="operational_justification" rows="3" placeholder="Enter Justification" required></textarea>
-
                 <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeOperationalForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closeOperationalForm()">Close</button>
-            </form>
-        </div>
 
-        <!-- Privacy Impact Form -->
-        <button class="open-button" onclick="openPrivacyForm()">Input Privacy Impact</button>
-        <div class="form-popup" id="privacyForm">
-            <form id = privacyFormSubmit action="{{ route('damage.store') }}" class="form-container" method="post">
-                @csrf
-                <h1>Privacy Impact</h1>
+    <!-- Privacy Impact Form -->
+    <div class="dialog-container" id="privacyForm">
+        <form id="privacyFormSubmit" action="{{ route('damage.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Privacy Impact
+                </h2>
+            </div>
+            <div class="card-form">
                 <label for="privacyImpact"><b>Select Privacy Impact Severity:</b></label>
-                <div class="form-group">
-                    <select class="form-control" id="privacyImpact" name="privacy_impact">
-                        <option value="Negligible">Negligible</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Major">Major</option>
-                        <option value="Severe">Severe</option>
-                    </select>
-                </div>
+                <select class="form-control" id="privacyImpact" name="privacy_impact" required>
+                    <option value="Negligible">Negligible</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Major">Major</option>
+                    <option value="Severe">Severe</option>
+                </select>
                 <label for="privacyJustification"><b>Justification for Privacy Impact Rating:</b></label>
                 <textarea class="form-control" id="privacyJustification" name="privacy_justification" rows="3" placeholder="Enter Justification" required></textarea>
-
                 <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closePrivacyForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" onclick="closePrivacyForm()">Close</button>
-            </form>
+    <div class="asset-details-icon" onclick="togglePopup()">
+    <i class="fas fa-info-circle">Asset details</i>
+    </div>
+    
+    <div class="dialog-container" id="assetDetailsPopup">
+        <div class="card">
+            <h2>Asset Details</h2>
+
+            <div id="securityDisplay" style="display: none;">
+                <h2>Security Property:</h2>
+                <p id="securityProperty"></p>
+            </div>
+
+            <!-- Display area for damage scenario -->
+            <div id="damageDisplay" style="display: none;">
+                <h2>Damage Scenario:</h2>
+                <p id="damageScenario"></p>
+            </div>
+
+            <!-- Display area for safety impact -->
+            <div id="safetyDisplay" style="display: none;">
+                <p id="safetySeverity"></p>
+                <p id="safetyJustification"></p>
+            </div>
+            <div id="financialDisplay" style="display: none;">
+                <p id="financialseverity"></p>
+                <p id="financialJustification"></p>
+            </div>
+            <!-- Display area for operational impact -->
+            <div id="operationalDisplay" style="display: none;">
+                <p id="operationalSeverity"></p>
+                <p id="operationalJustification"></p>
+            </div>
+
+            <!-- Display area for privacy impact -->
+            <div id="privacyDisplay" style="display: none;">
+                <h2>Privacy Impact:</h2>
+                <p id="privacySeverity"></p>
+                <p id="privacyJustification"></p>
+            </div>
+
+            <!-- Add a button to calculate overall impact rating -->
+            <button id="calculateOverallButton">Calculate Overall Impact Rating</button>
+
+            <!-- Add a placeholder to display the overall impact rating -->
+            <div id="overallImpactDisplay"></div>
+            <button type="button" class="action-button btn btn-secondary" onclick="closeAssetDetailsPopup()">Close</button>
+
         </div>
-        <h2>Asset Details</h2>
-
-        <div id="securityDisplay" style="display: none;">
-            <h2>Security Property:</h2>
-            <p id="securityProperty"></p>
-        </div>
-
-        <!-- Display area for damage scenario -->
-        <div id="damageDisplay" style="display: none;">
-            <h2>Damage Scenario:</h2>
-            <p id="damageScenario"></p>
-        </div>
-
-        <!-- Display area for safety impact -->
-        <div id="safetyDisplay" style="display: none;">
-            <p id="safetySeverity"></p>
-            <p id="safetyJustification"></p>
-        </div>
-        <div id="financialDisplay" style="display: none;">
-            <p id="financialseverity"></p>
-            <p id="financialJustification"></p>
-        </div>
-        <!-- Display area for operational impact -->
-        <div id="operationalDisplay" style="display: none;">
-            <p id="operationalSeverity"></p>
-            <p id="operationalJustification"></p>
-        </div>
-
-        <!-- Display area for privacy impact -->
-        <div id="privacyDisplay" style="display: none;">
-            <h2>Privacy Impact:</h2>
-            <p id="privacySeverity"></p>
-            <p id="privacyJustification"></p>
-        </div>
-
-        <!-- Add a button to calculate overall impact rating -->
-        <button id="calculateOverallButton">Calculate Overall Impact Rating</button>
-
-        <!-- Add a placeholder to display the overall impact rating -->
-        <div id="overallImpactDisplay"></div>
-
-        <button onclick="location.href='{{ route('threat.show')}}';">Next</button>
-
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/scripts.js') }}"></script>
-    </body>
-</html>
+  <script src="{{ asset('js/show.js') }}"></script>
+@endsection

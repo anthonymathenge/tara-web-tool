@@ -1,51 +1,88 @@
+@extends('layouts.app')
 
-<link rel="stylesheet" href="/css/styles.css">
+@section('title', 'threat')
 
-<h1>Threat Identification</h1>
-<button class="open-button" onclick="openSTRIDEForm()">Select STRIDE Threat</button>
+@section('content')
+    <h1>Threat Identification</h1>
 
-<!-- STRIDE selection form -->
-<div class="form-popup" id="strideForm">
-    <form id="strideFormSubmit" action="{{ route('threat.store') }}" class="form-container" method="post">
-        @csrf
-        <h1>Select STRIDE Threat</h1>
-        <label for="strideThreat"><b>Select your threat:</b></label>
-        <div class="form-group">
-            <select class="form-control" id="strideThreat" name="stride_threat">
-                <option value="Spoofing">Spoofing</option>
-                <option value="Tampering">Tampering</option>
-                <option value="Repudiation">Repudiation</option>
-                <option value="InformationDisclosure">Information Disclosure</option>
-                <option value="DenialOfService">Denial of Service</option>
-                <option value="ElevationOfPrivileges">Elevation of Privileges</option>
-            </select>
-        </div>
+    <div class="container">
+        <div class="links" onclick="openSTRIDEForm()">Select STRIDE Threat</div>
+        <div class="links" onclick="openThreatForm()">Enter Threat Name</div>
+    </div>
 
-        <!-- Add other input fields as needed -->
+    <!-- STRIDE selection form -->
+    <div class="dialog-container" id="strideForm">
+        <form id="strideFormSubmit" action="{{ route('threat.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Select STRIDE Threat
+                </h2>
+            </div>
+            <div class="card-form">
+                <label for="strideThreat"><b>Select your threat:</b></label>
+                <select class="form-control" id="strideThreat" name="stride_threat">
+                    <option value="Spoofing">Spoofing</option>
+                    <option value="Tampering">Tampering</option>
+                    <option value="Repudiation">Repudiation</option>
+                    <option value="InformationDisclosure">Information Disclosure</option>
+                    <option value="DenialOfService">Denial of Service</option>
+                    <option value="ElevationOfPrivileges">Elevation of Privileges</option>
+                </select>
+                <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeSTRIDEForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" onclick="closeSTRIDEForm()">Close</button>
-    </form>
-</div>
 
-<button class="open-button" onclick="enterThreatName()">Enter Threat Name</button>
+    <!-- Enter Threat Name form -->
+    <div class="dialog-container" id="threatForm" style="display: none;">
+        <form id="threatNameFormSubmit" action="{{ route('threat.store') }}" class="form-container card" method="post">
+            @csrf
+            <div class="card-image">
+                <h2 class="card-heading">
+                    Input Threat Name
+                </h2>
+            </div>
+            <div class="card-form">
+                <label for="threatName"><b>Threat Name:</b></label>
+                <input type="text" id="threatName" name="threat_name" placeholder="Enter Threat Name" required>
+                <!-- Add other input fields as needed -->
+            </div>
+            <div class="action">
+                <button type="submit" class="action-button btn btn-primary">Submit</button>
+                <button type="button" class="action-button btn btn-secondary" onclick="closeThreatForm()">Close</button>
+            </div>
+        </form>
+    </div>
 
-<div class="form-popup" id="threatNameForm" style="display: none;">
-    <form id="threatNameFormSubmit" action="{{ route('threat.store') }}" class="form-container" method="post">
-        @csrf
-        <h1>Input Threat Name</h1>
-        <label for="threatName"><b>Threat Name:</b></label>
-        <input type="text" id="threatName" name="threat_name" placeholder="Enter Threat Name" required>
+    <div class="asset-details-icon" onclick="togglePopup()">
+    <i class="fas fa-info-circle">Asset details</i>
+    </div>
+    
+    <div class="dialog-container" id="assetDetailsPopup">
+        <div class="card">
+        <h2>Asset Details</h2>
 
-        <!-- Add other input fields as needed -->
+            <div id="threatNameDisplay" style="display: none;">
+                    <h2>Threat Name:</h2>
+                    <p id="threatName"></p>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" onclick="closeThreatNameForm()">Close</button>
-    </form>
-</div>
+                <!-- Display area for threat type -->
+                <div id="threatTypeDisplay" style="display: none;">
+                    <h2>Threat Type:</h2>
+                    <p id="threatType"></p>
+                </div>
+            <button type="button" class="action-button btn btn-secondary" onclick="closeAssetDetailsPopup()">Close</button>
+         </div>
+    </div>
 
-<!-- Button to redirect to tara.blade.php -->
-<button onclick="location.href='{{ route('tara.index') }}';">Next</button>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/threat.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ asset('js/threat.js') }}"></script>
+    <!-- Button to redirect to tara.blade.php -->
+@endsection

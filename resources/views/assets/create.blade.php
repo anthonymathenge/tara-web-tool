@@ -1,20 +1,22 @@
-<!-- resources/views/assets/create.blade.php -->
-
-    <h1>Create Asset</h1>
-
-
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Asset</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ asset('css/create.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Asset Creation</h1>
 
     <form action="{{ route('assets.store') }}" method="post">
         @csrf
 
         <div class="form-group">
-            <label for="name">Asset Name</label>
-            <input type="text" name="name" id="name" class="form-control" required>
+            <input type="text" name="name" id="name" class="todo-input" placeholder="Enter asset name..." required>
         </div>
 
         <!-- Add other asset fields here -->
@@ -24,15 +26,21 @@
 
     <h1>List of Assets</h1>
 
-    <ul>
-        @if(isset($assets) && count($assets) > 0)
+    <div class="todos-container">
+        <ul>
+            @if(isset($assets) && count($assets) > 0)
                 @foreach($assets as $asset)
-                <li>
-                    <a href="{{ route('assets.show', $asset->id) }}">{{ $asset->name }}</a>
-                </li>
-            @endforeach
-        @else
-            <li>No assets found.</li>
-        @endif
-    </ul>
+                <li class = todo>
+                <a href="{{ route('damage.index', $asset->id) }}">{{ $asset->name }}</a>
 
+                </li>
+                @endforeach
+            @else
+                <li>No assets found.</li>
+            @endif
+        </ul>
+    </div>
+  </div>
+  <script src="{{ asset('js/create.js') }}"></script>
+</body>
+</html>
