@@ -92,7 +92,7 @@
     <div class="dialog-container" id="assetDetailsPopup">
         <div class="card">
             <h2>Asset Details</h2>
-            @if($asset->damage)
+            @if($asset->threat)
             <p>Security property: {{ $asset->damage->security_property }}</p>
             <p>Damage scenario: {{ $asset->damage->damage_scenario }}</p>
             <p>Safety impact: {{ $asset->damage->safety_impact }}</p>

@@ -31,5 +31,4 @@ protected $fillable = [ 'name'];
     {
         return $this->hasOne(Tara::class);
     }
-
 }

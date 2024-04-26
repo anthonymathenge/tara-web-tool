@@ -48,11 +48,6 @@ class AssetController extends Controller
     // Pass the asset to the view
     return view('assets.show', ['asset' => $asset]);
     }
-    public function details($id)
-{
-    $asset = Asset::find($id);
-
-    return response()->json($asset);
-}
+   
 
 }
