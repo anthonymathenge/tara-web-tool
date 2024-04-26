@@ -11,7 +11,6 @@ class CreateAssetsTable extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('asset_id')->unique();
             $table->string('name');
             // Add other asset attributes as needed
             $table->timestamps();
@@ -23,4 +22,3 @@ class CreateAssetsTable extends Migration
         Schema::dropIfExists('assets');
     }
 }
-

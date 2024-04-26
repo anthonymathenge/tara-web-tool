@@ -10,8 +10,7 @@ class CreateSecurityPropertiesTable extends Migration
     {
         Schema::create('security_properties', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('asset_id');
-            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->foreignId('asset_id')->constrained()->onDelete('cascade');
             $table->string('property');
             $table->timestamps();
         });

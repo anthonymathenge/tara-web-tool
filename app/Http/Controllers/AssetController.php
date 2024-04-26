@@ -1,43 +1,58 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Asset; // Make sure to import the Asset model
+use App\Models\Asset;
 
 class AssetController extends Controller
 {
-    public function create()
+    //Display form to create a new asset
+    public function create($assetId)
     {
-        return view('assets.create');
+        // Retrieve assets belonging to the authenticated user
+        $user = Auth::user();
+        $assets = $user->assets;
+        $selectedAsset = Asset::findOrFail($assetId);
+
+        //Render the create asset form view with the retrieved asset
+        return view('assets.create', ['assets' => $assets],compact('selectedAsset'));
     }
 
     public function store(Request $request)
     {
+        //Validate the incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
-            // Add validation rules for other asset fields as needed
         ]);
-
         $asset = new Asset();
-        $asset->user_id = auth()->user()->id; // Associate the asset with the currently authenticated user
-        $asset->asset_id = uniqid(); // Generate a unique asset ID
-        $asset->name = $request->name;
+        // Associate the asset with the currently authenticated user
+        $asset->user_id = auth()->user()->id;
+        // Generate a unique asset ID
         // Set other asset details from the form
-
+        $asset->name = $request->name;
         $asset->save();
-
         return redirect()->route('assets.index')->with('success', 'Asset created successfully!');
     }
     public function index()
     {
-        $assets = Asset::all();
+        //Retrieve assets belonging to the authenticated user
+        $user = Auth::user();
+        $assets = $user->assets;
         return view('assets.create', compact('assets'));
     }
-    public function show(Asset $asset)
+    public function show($assetId)
     {
-        $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
-        return view('assets.show', compact('asset', 'securityProperties'));
+        $asset = Asset::find($assetId);
+
+    // Pass the asset to the view
+    return view('assets.show', ['asset' => $asset]);
     }
+    public function details($id)
+{
+    $asset = Asset::find($id);
+
+    return response()->json($asset);
+}
 
 }

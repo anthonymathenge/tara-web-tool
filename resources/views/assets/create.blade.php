@@ -28,16 +28,18 @@
 
     <div class="todos-container">
         <ul>
-            @if(isset($assets) && count($assets) > 0)
+        @if(isset($assets) && count($assets) > 0)
+            <ul>
                 @foreach($assets as $asset)
-                <li class = todo>
-                <a href="{{ route('damage.index', $asset->id) }}">{{ $asset->name }}</a>
-
-                </li>
+                    <li class="todo">
+                        <a href="{{ route('damage.index', ['id' => $asset->id]) }}">{{ $asset->name }}</a>
+                    </li>
                 @endforeach
-            @else
-                <li>No assets found.</li>
-            @endif
+            </ul>
+        @else
+            <li>No assets found.</li>
+        @endif
+
         </ul>
     </div>
   </div>

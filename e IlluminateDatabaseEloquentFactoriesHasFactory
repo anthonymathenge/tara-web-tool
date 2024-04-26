@@ -1,0 +1,29 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7279
+    [34mall[39m: [
+      [34;4mApp\Models\Asset[39;24m {#7277
+        [34mid[39m: [35m1[39m,
+        [34muser_id[39m: [35m1[39m,
+        [34masset_id[39m: "[32m66297e81120fa[39m",
+        [34mname[39m: "[32mjava[39m",
+        [34mcreated_at[39m: "[32m2024-04-24 21:49:53[39m",
+        [34mupdated_at[39m: "[32m2024-04-24 21:49:53[39m",
+      },
+      [34;4mApp\Models\Asset[39;24m {#7280
+        [34mid[39m: [35m2[39m,
+        [34muser_id[39m: [35m1[39m,
+        [34masset_id[39m: "[32m66297e86dafa7[39m",
+        [34mname[39m: "[32mnada123[39m",
+        [34mcreated_at[39m: "[32m2024-04-24 21:49:58[39m",
+        [34mupdated_at[39m: "[32m2024-04-24 21:49:58[39m",
+      },
+      [34;4mApp\Models\Asset[39;24m {#7281
+        [34mid[39m: [35m3[39m,
+        [34muser_id[39m: [35m1[39m,
+        [34masset_id[39m: "[32m66297e8d412eb[39m",
+        [34mname[39m: "[32mtony345[39m",
+        [34mcreated_at[39m: "[32m2024-04-24 21:50:05[39m",
+        [34mupdated_at[39m: "[32m2024-04-24 21:50:05[39m",
+      },
+    ],
+  }
+

@@ -1,37 +1,21 @@
-function openSTRIDEForm() {
-  document.getElementById("strideForm").classList.add("active");
-}
+$(document).ready(function() {
+  // Handle form submission
+  $('form').on('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
 
-// Function to close STRIDE selection form
-function closeSTRIDEForm() {
-  document.getElementById("strideForm").classList.remove("active");
-}
-
-function openThreatForm() {
-  document.getElementById("threatForm").style.display = "block";
-}
-
-function closeThreatForm() {
-  document.getElementById("threatForm").style.display = "none";
-}
-
-
-function handleThreatFormSubmit(event) {
-  event.preventDefault();
-  var threatName = document.getElementById('threatName').value;
-  var threatType = document.getElementById('threatType').value;
-  
-  document.getElementById('threatNameDisplay').innerText = "Threat Name: " + threatName;
-  document.getElementById('threatTypeDisplay').innerText = "Threat Type: " + threatType;
-
-  document.getElementById('threatNameDisplay').style.display = 'block';
-  document.getElementById('threatTypeDisplay').style.display = 'block';
-
-  // Add any other actions needed after form submission
-
-  // Close the threat form popup
-  closeThreatForm();
-}
-
-// Assuming you have a form with the ID 'threatForm'
-document.getElementById('threatForm').addEventListener('submit', handleThreatFormSubmit);
+      $.ajax({
+          url: $(this).attr('action'), // Get the form action URL
+          method: 'POST', // Use POST method
+          data: $(this).serialize(), // Serialize the form data
+          success: function(response) {
+              // Handle successful form submission here
+              // For example, you can display a success message
+              alert('Form submitted successfully!');
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              // Handle errors here
+              console.error(textStatus, errorThrown);
+          }
+      });
+  });
+});

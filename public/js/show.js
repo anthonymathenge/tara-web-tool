@@ -1,138 +1,43 @@
-var links = document.getElementsByClassName('links');
-for (var i = 0; i < links.length; i++) {
-    addClass(i);
-}
-
-function addClass(id) {
-    setTimeout(function() {
-        if (id > 0) links[id - 1].classList.remove('hover');
-        links[id].classList.add('hover');
-    }, id * 750);
-}
-// Function to open damage modal
+// Function to calculate overall impact rating
 function togglePopup() {
   var popup = document.getElementById("assetDetailsPopup");
   popup.style.display = popup.style.display === "none" ? "block" : "none";
 }
+
 function closeAssetDetailsPopup() {
   var popup = document.getElementById("assetDetailsPopup");
-    popup.style.display = "none";
+  popup.style.display = "none";
 }
+$(document).ready(function() {
+  // Fetch asset details when the page loads
 
-function openDamageForm() {
-  document.getElementById("damageForm").classList.add("active");
-}
+  // Handle form submission
+  $('form').on('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
 
-function closeDamageForm() {
-  document.getElementById("damageForm").classList.remove("active");
-}
-function openSafetyForm() {
-  document.getElementById("safetyForm").classList.add("active");
-}
-function closeSafteyForm() {
-  document.getElementById("safetyForm").classList.remove("active");
-}
-function openFinancialForm() {
-  document.getElementById("financialForm").classList.add("active");
-}
-function closeFinancialForm() {
-  document.getElementById("financialForm").classList.remove("active");
-}
-function openOperationalForm() {
-  document.getElementById("operationalForm").classList.add("active");
-}
+      $.ajax({
+          url: $(this).attr('action'), // Get the form action URL
+          method: 'POST', // Use POST method
+          data: $(this).serialize(), // Serialize the form data
+          success: function(response) {
+              // Handle successful form submission here
+              // For example, you can display a success message
+              alert('Form submitted successfully!');
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              // Handle errors here
+              console.error(textStatus, errorThrown);
+          }
+      });
+  });
+});
 
-function closeOperationalForm() {
-  document.getElementById("operationalForm").classList.remove("active");
-}
-function openPrivacyForm() {
-  document.getElementById("privacyForm").classList.add("active");
-}
-
-function closePrivacyForm() {
-  document.getElementById("privacyForm").classList.remove("active");
-}
-function openSecurityForm() {
-  document.getElementById("securityForm").classList.add("active");
-}
-
-function closeSecurityForm() {
-  document.getElementById("securityForm").classList.remove("active");
-}
-function handleSecurityFormSubmit(event) {
-  event.preventDefault();
-  var securityProperty = document.getElementById('securityProperty').value;
-  document.getElementById('securityDisplay').innerText = "Selected security property: " + securityProperty;
-  document.getElementById('securityDisplay').style.display = 'block';
-  closeSecurityForm();
-}
-
-// Function to handle damage form submission
-function handleDamageFormSubmit(event) {
-  event.preventDefault();
-  var damageScenario = document.getElementById('damageScenario').value;
-  document.getElementById('damageDisplay').innerText = "Damage scenario: " + damageScenario;
-  document.getElementById('damageDisplay').style.display = 'block';
-  closeDamageForm();
-}
-
-// Function to handle safety form submission
-function handleSafetyFormSubmit(event) {
-  event.preventDefault();
-  var safetyImpact = document.getElementById('safetyImpact').value;
-  var safetyJustification = document.getElementById('safetyJustification').value;
-  document.getElementById('safetyDisplay').innerText = "Safety impact severity: " + safetyImpact + " Justification: " + safetyJustification;
-  document.getElementById('safetyDisplay').style.display = 'block';
-  closeSafteyForm();
-}
-function handleFinancialFormSubmit(event) {
-  event.preventDefault();
-  var financialImpact = document.getElementById('financialImpact').value;
-  var financialJustification = document.getElementById('financialJustification').value;
-  document.getElementById('financialDisplay').innerText = "Financial impact severity: " + financialImpact + " Justification: " + financialJustification;
-  document.getElementById('financialDisplay').style.display = 'block';
-  closeFinancialForm();
-}
-
-// Function to handle operational form submission
-function handleOperationalFormSubmit(event) {
-  event.preventDefault();
-  var operationalImpact = document.getElementById('operationalImpact').value;
-  var operationalJustification = document.getElementById('operationalJustification').value;
-  document.getElementById('operationalDisplay').innerText = "Operational impact severity: " + operationalImpact + " Justification: " + operationalJustification;
-  document.getElementById('operationalDisplay').style.display = 'block';
-  closeOperationalForm();
-}
-
-// Function to handle privacy form submission
-function handlePrivacyFormSubmit(event) {
-  event.preventDefault();
-  var privacyImpact = document.getElementById('privacyImpact').value;
-  var privacyJustification = document.getElementById('privacyJustification').value;
-  document.getElementById('privacyDisplay').innerText = "Privacy impact severity: " + privacyImpact + " Justification: " + privacyJustification;
-  document.getElementById('privacyDisplay').style.display = 'block';
-  closePrivacyForm();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-
-window.onload = function() {
-  document.getElementById('securityFormSubmit').addEventListener('submit', handleSecurityFormSubmit);
-  document.getElementById('damageFormSubmit').addEventListener('submit', handleDamageFormSubmit);
-  document.getElementById('financialFormSubmit').addEventListener('submit', handleFinancialFormSubmit);
-  document.getElementById('safetyFormSubmit').addEventListener('submit', handleSafetyFormSubmit);
-  document.getElementById('operationalFormSubmit').addEventListener('submit', handleOperationalFormSubmit);
-  document.getElementById('privacyFormSubmit').addEventListener('submit', handlePrivacyFormSubmit);
-};
-
-
-// Function to calculate overall impact rating
 document.getElementById('calculateOverallButton').addEventListener('click', function() {
   // Fetch individual impact ratings from the form fields
-  var safetyImpact = document.getElementById('safetyImpact').value;
-  var financialImpact = document.getElementById('financialImpact').value;
-  var operationalImpact = document.getElementById('operationalImpact').value;
-  var privacyImpact = document.getElementById('privacyImpact').value;
+  var safetyImpact = document.getElementById('safety_impact').value;
+  var financialImpact = document.getElementById('financial_impact').value;
+  var operationalImpact = document.getElementById('operational_impact').value;
+  var privacyImpact = document.getElementById('privacy_impact').value;
 
   // Define the Meta Data array (assuming it contains the overall impact ratings)
   var metaData = ['Negligible', 'Moderate', 'Major', 'Severe'];
@@ -150,7 +55,10 @@ document.getElementById('calculateOverallButton').addEventListener('click', func
   var overallImpactRating = metaData[maxIndex] || "Waiting for all ratings";
 
   // Display the overall impact rating
-  document.getElementById('overallImpactDisplay').innerText = "Overall Impact Rating: " + overallImpactRating;
+  document.getElementById('overallImpactRating').innerText = overallImpactRating;
+  document.getElementById('overallImpactDisplay').style.display = "block";
+
 });
-});
+
+
 

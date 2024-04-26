@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Models\Damage;
@@ -15,50 +17,65 @@ class DamageController extends Controller
         // Fetch the asset based on the ID
         $asset = Asset::findOrFail($assetId);
 
-        // Fetch threats associated with the specified asset
-        $damageScenario = Damage::where('asset_id', $assetId)->get();
+        // Fetch saved selections for the asset from the database
+        $savedSelections = Damage::where('asset_id', $assetId)->first();
+
         $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
 
-        // Return the view with the threats data
-        return view('assets.show', compact('asset','damageScenario','securityProperties'));
-
+        // Pass the asset and saved selections data to the view
+        return view('assets.show', compact('asset', 'savedSelections','securityProperties'));
     }
+
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'asset_id' => 'required|exists:assets,id',
-            'damage_scenario' => 'required|string',
-            'security_property' => 'required|in:Confidentiality,Integrity,Availability',
-            'safety_impact' => 'required|in:Negligible,Moderate,Major,Severe',
-            'financial_impact' => 'required|in:Negligible,Moderate,Major,Severe',
-            'operational_impact' => 'required|in:Negligible,Moderate,Major,Severe',
-            'privacy_impact' => 'required|in:Negligible,Moderate,Major,Severe',
-        ]);
+{
+    $request->validate([
+        'asset_id' => 'required|exists:assets,id',
+        'security_property' => 'required|string',
+        'damage_scenario' => 'required|string',
+        'safety_impact' => 'required|string',
+        'financial_impact' => 'required|string',
+        'operational_impact' => 'required|string',
+        'privacy_impact' => 'required|string',
+        'safety_justification' => 'nullable|string',
+        'financial_justification' => 'nullable|string',
+        'operational_justification' => 'nullable|string',
+        'privacy_justification' => 'nullable|string',
+    ]);
 
-        $damageScenario = new DamageScenario();
+    // Check if a Damage instance already exists for the given asset_id
+    $damage = Damage::firstWhere('asset_id', $request->asset_id);
 
-        // Populate the damage scenario attributes from the request
-        $damageScenario->asset_id = $request->asset_id;
-        $damageScenario->scenario = $request->damage_scenario;
-        $damageScenario->asset_id = $request->asset_id;
-        $damageScenario->property = $request->security_property;
-        $damageScenario->safety_impact = $request->safety_impact;
-        $damageScenario->financial_impact = $request->financial_impact;
-        $damageScenario->operational_impact = $request->operational_impact;
-        $damageScenario->privacy_impact = $request->privacy_impact;
-
-
-        // Set user_id if you have user authentication
-        $damageScenario->user_id = Auth::id(); // Assuming you're using user authentication
-
-        // Save the damage scenario to the database
-        $damageScenario->save();
-
-
-        // Redirect back to the asset show page with a success message
-        return redirect()->route('damage.show', ['id' => $request->asset_id])
-                         ->with('success', 'Damage scenario saved successfully.');
+    // If it doesn't exist, create a new one
+    if (!$damage) {
+        $damage = new Damage();
+        $damage->asset_id = $request->asset_id;
     }
-  
+
+    // Update (or set) the attributes
+    $damage->damage_scenario = $request->damage_scenario;
+    $damage->security_property = $request->security_property;
+    $damage->safety_impact = $request->safety_impact;
+    $damage->financial_impact = $request->financial_impact;
+    $damage->operational_impact = $request->operational_impact;
+    $damage->privacy_impact = $request->privacy_impact;
+    $damage->safety_justification = $request->safety_justification;
+    $damage->financial_justification = $request->financial_justification;
+    $damage->operational_justification = $request->operational_justification;
+    $damage->privacy_justification = $request->privacy_justification;
+
+    // Save the Damage instance
+    $damage->save();
+
+    return redirect()->route('damage.index', ['id' => $request->asset_id])->with('success', 'Damage scenario saved successfully.');
+}
+
+    
+    public function getDetails()
+{
+    $damageDetails = DB::table('damages')->get();
+
+    return response()->json($damageDetails);
+}
+    
 }

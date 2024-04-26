@@ -4,27 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateTarasTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('taras', function (Blueprint $table) {
             $table->id();
             $table->foreignId('asset_id')->constrained()->onDelete('cascade'); // Foreign key for asset
-            $table->foreignId('damage_id')->constrained('damages')->onDelete('cascade'); // Foreign key for damage scenario
-            $table->foreignId('threat_id')->constrained('threats')->onDelete('cascade'); // Foreign key for damage scenario
-            $table->string('tara');
+            $table->string('attack_path');
+            $table->string('elapsed_time');
+            $table->string('specialist_expertise');
+            $table->string('knowledge_item');
+            $table->string('window_of_opportunity');
+            $table->string('equipment');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('taras');
     }

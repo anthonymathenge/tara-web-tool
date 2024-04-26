@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-  public function showAsset($assetId)
+  public function index($assetId)
   {
       // Retrieve the asset based on the $assetId
       $asset = Asset::find($assetId);
+
   
       // Check if the asset exists
       if (!$asset) {
@@ -20,5 +21,6 @@ class AppController extends Controller
       // Pass the $asset variable to the view
       return view('layouts.app', compact('asset'));
   }
+  
   
 }

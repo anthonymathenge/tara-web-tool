@@ -3,62 +3,33 @@
 @section('title', 'threat')
 
 @section('content')
-    <h1>Threat Identification</h1>
 
-    <div class="container">
-        <div class="links" onclick="openSTRIDEForm()">Select STRIDE Threat</div>
-        <div class="links" onclick="openThreatForm()">Enter Threat Name</div>
-    </div>
+<div class="container">
+    <h1>Create Threat for Asset: {{ $asset->name }}</h1>
 
-    <!-- STRIDE selection form -->
-    <div class="dialog-container" id="strideForm">
-        <form id="strideFormSubmit" action="{{ route('threat.store') }}" class="form-container card" method="post">
-            @csrf
-            <div class="card-image">
-                <h2 class="card-heading">
-                    Select STRIDE Threat
-                </h2>
-            </div>
-            <div class="card-form">
-                <label for="strideThreat"><b>Select your threat:</b></label>
-                <select class="form-control" id="strideThreat" name="stride_threat">
-                    <option value="Spoofing">Spoofing</option>
-                    <option value="Tampering">Tampering</option>
-                    <option value="Repudiation">Repudiation</option>
-                    <option value="InformationDisclosure">Information Disclosure</option>
-                    <option value="DenialOfService">Denial of Service</option>
-                    <option value="ElevationOfPrivileges">Elevation of Privileges</option>
-                </select>
-                <!-- Add other input fields as needed -->
-            </div>
-            <div class="action">
-                <button type="submit" class="action-button btn btn-primary">Submit</button>
-                <button type="button" class="action-button btn btn-secondary" onclick="closeSTRIDEForm()">Close</button>
-            </div>
-        </form>
-    </div>
+    <form action="{{ route('threat.store') }}" method="POST">
+        @csrf
 
+        <input type="hidden" name="asset_id" value="{{ $asset->id }}">
 
-    <!-- Enter Threat Name form -->
-    <div class="dialog-container" id="threatForm" style="display: none;">
-        <form id="threatNameFormSubmit" action="{{ route('threat.store') }}" class="form-container card" method="post">
-            @csrf
-            <div class="card-image">
-                <h2 class="card-heading">
-                    Input Threat Name
-                </h2>
-            </div>
-            <div class="card-form">
-                <label for="threatName"><b>Threat Name:</b></label>
-                <input type="text" id="threatName" name="threat_name" placeholder="Enter Threat Name" required>
-                <!-- Add other input fields as needed -->
-            </div>
-            <div class="action">
-                <button type="submit" class="action-button btn btn-primary">Submit</button>
-                <button type="button" class="action-button btn btn-secondary" onclick="closeThreatForm()">Close</button>
-            </div>
-        </form>
-    </div>
+        <div class="form-group">
+            <label for="stride_name">STRIDE Name</label>
+            <select class="form-control" id="stride_name" name="stride_name">
+                @foreach(['Spoofing', 'Tampering', 'Repudiation', 'InformationDisclosure', 'DenialOfService', 'ElevationOfPrivileges'] as $stride)
+                    <option value="{{ $stride }}" {{ ($asset->threat && $stride == $asset->threat->stride_name) ? 'selected' : '' }}>{{ $stride }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="threat_name">Threat Name</label>
+            <input type="text" name="threat_name" id="threat_name" class="form-control" value="{{ $asset->threat ? $asset->threat->threat_name : '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Threat</button>
+    </form>
+</div>
+
 
     <div class="asset-details-icon" onclick="togglePopup()">
     <i class="fas fa-info-circle">Asset details</i>
@@ -66,23 +37,21 @@
     
     <div class="dialog-container" id="assetDetailsPopup">
         <div class="card">
-        <h2>Asset Details</h2>
+            <h2>Asset Details</h2>
 
-            <div id="threatNameDisplay" style="display: none;">
-                    <h2>Threat Name:</h2>
-                    <p id="threatName"></p>
-            </div>
-
-                <!-- Display area for threat type -->
-                <div id="threatTypeDisplay" style="display: none;">
-                    <h2>Threat Type:</h2>
-                    <p id="threatType"></p>
-                </div>
+            @if($asset->threat)
+            <p>STRIDE Name: {{ $asset->threat->stride_name }}</p>
+            <p>Threat Name: {{ $asset->threat->threat_name }}</p>
+            @else
+                <p>No threat details available for this asset.</p>
+            @endif
             <button type="button" class="action-button btn btn-secondary" onclick="closeAssetDetailsPopup()">Close</button>
          </div>
     </div>
+    @section('scripts')
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="{{ asset('js/threat.js') }}"></script>
-    <!-- Button to redirect to tara.blade.php -->
+    <script src="{{ asset('js/threat.js') }}"></script>
+    @endsection
+
 @endsection

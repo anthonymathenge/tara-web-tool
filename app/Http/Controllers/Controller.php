@@ -15,7 +15,7 @@ class Controller extends BaseController
     public function __construct()
     {
         // Fetch and pass the asset information to all views
-        $asset = Asset::all(); // Example: Fetching the first asset
+        $asset = Asset::all(); 
         view()->share('asset', $asset);
     }
 }

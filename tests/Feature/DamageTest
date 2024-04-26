@@ -1,0 +1,46 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\Asset;
+use App\Models\Damage;
+use App\Models\User;
+
+class DamageTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function testStoreMethod()
+{
+    // Create a new user
+    $user = User::factory()->create();
+
+    // Create a new asset
+    $asset = Asset::factory()->create(['user_id' => $user->id]);
+
+    // Define the data to submit
+    $data = [
+        'asset_id' => $asset->id,
+        'damage_scenario' => 'Test scenario',
+        'security_property' => 'Confidentiality',
+        'safety_impact' => 'Negligible',
+        'financial_impact' => 'Negligible',
+        'operational_impact' => 'Negligible',
+        'privacy_impact' => 'Negligible',
+        // Add other fields as necessary
+    ];
+
+    // Make a POST request to the store route
+    $response = $this->actingAs($user)->post(route('damage.store'), $data);
+
+    // Assert that the response was successful
+    $response->assertStatus(302);
+
+    // Assert that the data was stored in the database
+    $this->assertDatabaseHas('damages', $data);
+}
+
+}

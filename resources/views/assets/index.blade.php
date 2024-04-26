@@ -5,7 +5,7 @@
 <ul>
     @foreach($assets as $asset)
         <li>
-            <a href="{{ route('assets.show', $asset->id) }}">{{ $asset->name }}</a>
+            <a href="{{ route('assets.create', $asset->id) }}">{{ $asset->name }}</a>
         </li>
     @endforeach
 </ul>

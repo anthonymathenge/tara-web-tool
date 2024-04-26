@@ -11,6 +11,7 @@ class SecurityController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
+        
             'asset_id' => 'required|exists:assets,id',
             'security_property' => 'required|in:Confidentiality,Integrity,Availability',
         ]);

@@ -15,13 +15,11 @@ class MainController extends Controller
         // Fetch the asset based on the ID
         $asset = Asset::findOrFail($assetId);
 
-        // Fetch TARA records associated with the specified asset
-        $damageScenario = Damage::where('asset_id', $assetId)->get();
-        $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
-        $threats = Threat::where('asset_id', $assetId)->get();
-        $taraRecords = Tara::where('asset_id', $assetId)->get();
+        // Fetch saved selections for the asset from the database
 
-        // Return the view with the TARA records data
-        return view('assets.main', compact('asset','damageScenario','securityProperties','threats', 'taraRecords'));
+        $securityProperties = ['Confidentiality', 'Integrity', 'Availability'];
+
+        // Return the view with the assets data
+        return view('assets.main', compact('asset'));
     }
 }

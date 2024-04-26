@@ -1,12 +1,10 @@
 <?php
 
-// app/Http/Controllers/ThreatController.php
-
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Threat;
-use App\Models\Damage;
 use App\Models\Asset;
 
 class ThreatController extends Controller
@@ -14,39 +12,39 @@ class ThreatController extends Controller
     public function index($assetId)
     {
         // Fetch the asset based on the ID
-        $asset = Asset::findOrFail($assetId)->first();
+        $asset = Asset::findOrFail($assetId);
 
         // Fetch threats associated with the specified asset
-        $threats = Threat::where('asset_id', $assetId)->get();
+        $savedSelections = Threat::where('asset_id', $assetId)->first();
 
         // Pass both $asset and $threats to the view
-        return view('assets.threat', compact('asset', 'threats'));
+        return view('assets.threat', compact('asset', 'savedSelections'));
     }
-
-
 
 
     public function store(Request $request)
     {
         // Validate the request data
-        $validatedData = $request->validate([
-            'threat_name' => 'required|string|max:255',
-            'damage_id' => 'required|exists:damages,id', // Ensure the damage exists
-            'threat_name' => 'required|string|max:255', // Adjust validation rules as needed
+       $request->validate([
+            'asset_id' => 'required|exists:assets,id',
+            'stride_name' => 'required|string', // Adjust validation rules as needed
+            'threat_name' => 'required|string',
             // Add more validation rules for other fields if needed
         ]);
+        $threat = Threat::firstWhere('asset_id', $request->asset_id);
 
+        if (!$threat) {
+            $threat = new Threat();
+            $threat->asset_id = $request->asset_id; // Assuming asset_id is passed through the form
+        }
         // Create a new threat instance
-        $threat = new Threat();
-        $threat->asset_id = $request->asset_id; // Assuming asset_id is passed through the form
-        $threat->damage_id = $request->damage_id; // Assuming damage_id is passed through the form
+        $threat->stride_name = $request->stride_name;
         $threat->threat_name = $request->threat_name;
-        // Set other threat attributes as needed
-
         // Save the threat to the database
         $threat->save();
 
         // Redirect back or to any other page after storing the threat
-        return redirect()->back()->with('success', 'Threat stored successfully.');
+        return redirect()->route('threat.index', ['id' => $request->asset_id])->with('success', 'Threat stored successfully.');
+
     }
 }
